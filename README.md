@@ -60,6 +60,11 @@ typecho是带有token的，token由四部分组成，分别为长度为32的字�
 
 打开后，找到
 
+```php
+public function execute()
+{
+    $this->_options = $this->widget('Widget_Options');
+    $user = $this->widget('Widget_User');
 
     $this->_token = $this->_options->secret;
     if ($user->hasLogin()) {
