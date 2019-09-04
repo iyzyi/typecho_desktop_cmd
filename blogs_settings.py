@@ -64,7 +64,7 @@ if __name__ == '__main__':
     
     url = 'http://localhost/blog2'    #博客的url，可以是外网url，也可以是内网url，含http(s)://，最后一个字符不为/
     token1 = 'IEqbi2CiS5UrOlKtFRMzTQ)S2)G33EFd'    #token的一部分来源，具体请看README.md中的介绍
-    ip = '127.0.0.1'    #服务器的ip，连接数据库用
+    ip = '127.0.0.1'    #服务器的ip，也可以是外网ip，连接数据库用
     user = 'root'    #mysql用户名
     password = 'root'    #mysql密码
     database = 'blog2'    #typecho博客所用的数据库

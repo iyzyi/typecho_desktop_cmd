@@ -50,15 +50,98 @@ requests，pymysql
 
 ## 使用前必做
 
-typecho是带有token的，token由四部分组成，分别为长度为32的字符串（建站时初始化，之后不变），长度为32的字符串authCode（每次登录时随机化），user的id，一般admin为1，具体页面的referer。四部分以&连接，然后md5作为token。
+typecho是带有token的，token由四部分组成，分别为长度为32的字符串（建站时初始化，之后不变），长度为32的字符串authCode（每次登录时随机化），user的id，一般admin为1，具体页面的referer。四部分以&连接，然后md5作为token。（代码在\var\Widget\Security.php，可自己去看一下）
 
-我们需要手动获取token1，token2和3连接数据库后程序自动获取，token4也已经写在程序里了。
+我们需要手动获取token1，token2和3连接数据库后程序自动获取，token4也已经写在程序里了，所以只需要获取token1
 
 ### 获取token1
 
+搭建typecho一般都用宝塔吧，当然这不重要，只要你能用自己的方式打开网址目录下的`\var\Widget\Security.php`就行。
+
+打开后，找到
 
 
+    $this->_token = $this->_options->secret;
+    if ($user->hasLogin()) {
+    $this->_token .= '&' . $user->authCode . '&' . $user->uid;
+    }
+}
+```
 
+添加`echo "<script>alert('提示内容')</script>";`,如下：
+
+```php+HTML
+public function execute()
+{
+    $this->_options = $this->widget('Widget_Options');
+    $user = $this->widget('Widget_User');
+
+    $this->_token = $this->_options->secret;
+	echo "<script>alert('$this->_token')</script>";
+    if ($user->hasLogin()) {
+    $this->_token .= '&' . $user->authCode . '&' . $user->uid;
+    }
+}
+```
+
+然后打开你的博客，刷新一下，会弹出一个窗口，文本内容就是token1。
+
+**最后不要忘记删掉刚刚我们添加的那条语句 **
+
+### 开启数据库远程连接
+
+[我整理的一篇相关的文章，仅供参考](http://iyzy.xyz/index.php/archives/449/)
+
+### 程序配置
+
+**blogs_settings.py**可以设置你的博客配置信息，配置信息包括必填和选填两部分。
+
+打开**blogs_settings.py **后， 你会发现注释中写的很清楚了，这里我在补充几点：
+
+1、必填中的url和token是为了post传值，ip,user,password,database是数据库的配置信息
+
+2、如果你有多个typecho博客，可以添加多个博客的配置信息
+
+3、注意，配置信息的添加不是覆盖，而是追加，当添加了错误的信息时，请先删除生成的**typecho.conf **，否则错误的信息会一直在**typecho.conf **中。
+
+4、使用不同的typecho模板会设定不同的自定义字段（我说的不是你自己添加的自定义字段，而是你使用的外观模板的作者设定的自定义字段），体现在你写博客的那个界面的文本框的下方。如果你实在不会下面的操作，或是没有这个需求，可以不管它的。
+
+自定义字段的相关信息在表typecho_fields中，查看前你要先在web端写一篇使用到所有的外观模板的作者设定的自定义字段的文章（“的”比较多，泥萌好好断句）。
+
+```
+mysql -uroot -p123456
+#123456替换成你的数据库root密码
+
+use blog
+#blog替换成你的typecho数据库名称
+
+select * from typecho_fields;
+#此时你可以看到相关的自定义字段了
+```
+
+![1567582430893](C:\Users\kljxn\AppData\Roaming\Typora\typora-user-images\1567582430893.png)
+
+name填写图中例如thumbnail的字符串（我这里的thumbnail,previewContent等都是我使用的外观模板的作者设定的，你的可能会和我的不同。而且注意，必须你写过的文章中使用过这些自定义字段，数据库中才会显示）
+
+type就写对应的类型，str，int，float三种
+
+detail就写 程序运行到需要你输入自定义字段的时候，你希望程序会输出什么来提示你。
+
+比如说，我的thumbnai这个字段是控制文章封面的，所以detail我写的`detail = '封面图片：'`
+
+## 运行
+
+全部设置好之后，就可以使用**opration.py**了
+
+部分运行截图
+
+![1567582946346](C:\Users\kljxn\AppData\Roaming\Typora\typora-user-images\1567582946346.png)
+
+![1567582999459](C:\Users\kljxn\AppData\Roaming\Typora\typora-user-images\1567582999459.png)
+
+比较丑啊，希望别见怪，毕竟我是直男本男。。
+
+如果你不想输出mysql的操作语句，可以在operation.py中修改print_sql为False。
 
 ## 已知bug
 
@@ -69,4 +152,3 @@ typecho是带有token的，token由四部分组成，分别为长度为32的字�
 ## 时间线
 
 20190904　　第一次上传
-
