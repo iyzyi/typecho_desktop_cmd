@@ -82,7 +82,7 @@ public function execute()
     $user = $this->widget('Widget_User');
 
     $this->_token = $this->_options->secret;
-	echo "<script>alert('$this->_token')</script>";
+    echo "<script>alert('$this->_token')</script>";
     if ($user->hasLogin()) {
     $this->_token .= '&' . $user->authCode . '&' . $user->uid;
     }
@@ -124,7 +124,7 @@ select * from typecho_fields;
 #此时你可以看到相关的自定义字段了
 ```
 
-![1567582430893](https://github.com/iyzyi/typecho_desktop_cmd/pic/1567582430893.png)
+![1567582430893](https://github.com/iyzyi/typecho_desktop_cmd/blob/master/pic/1567582430893.png?raw=true)
 
 name填写图中类似thumbnail的字符串（我这里的thumbnail,previewContent等都是我使用的外观模板的作者设定的，你的可能会和我的不同。而且注意，必须你写过的文章中使用过这些自定义字段，数据库中才会显示）
 
@@ -140,9 +140,9 @@ detail就写 程序运行到需要你输入自定义字段的时候，你希望�
 
 部分运行截图
 
-![1567582946346](https://github.com/iyzyi/typecho_desktop_cmd/pic/1567582946346.png)
+![1567582946346](https://github.com/iyzyi/typecho_desktop_cmd/blob/master/pic/1567582946346.png?raw=true)
 
-![1567582999459](https://github.com/iyzyi/typecho_desktop_cmd/pic/1567582999459.png)
+![1567582999459](https://github.com/iyzyi/typecho_desktop_cmd/blob/master/pic/1567582999459.png?raw=true)
 
 比较丑啊，希望别见怪，毕竟我是直男本男。。
 
