@@ -4,7 +4,7 @@
 
 2　下载文章（下载全部图片，适用于本地的备份）
 
-3　下载文章（图片以base64形式2写入md文件，便于分享）　#TODO
+3　下载文章（图片以base64形式写入md文件，便于分享）　#TODO
 
 4　上传全新文章（数据库中不存在）
 
@@ -75,7 +75,7 @@ public function execute()
 
 添加`echo "<script>alert('提示内容')</script>";`,如下：
 
-```php+HTML
+```php
 public function execute()
 {
     $this->_options = $this->widget('Widget_Options');
@@ -91,7 +91,7 @@ public function execute()
 
 然后打开你的博客，刷新一下，会弹出一个窗口，文本内容就是token1。
 
-**最后不要忘记删掉刚刚我们添加的那条语句 **
+**最后不要忘记删掉刚刚我们添加的那条语句**
 
 ### 开启数据库远程连接
 
@@ -101,7 +101,7 @@ public function execute()
 
 **blogs_settings.py**可以设置你的博客配置信息，配置信息包括必填和选填两部分。
 
-打开**blogs_settings.py **后， 你会发现注释中写的很清楚了，这里我在补充几点：
+打开**blogs_settings.py**后， 你会发现注释中写的很清楚了，这里我在补充几点：
 
 1、必填中的url和token是为了post传值，ip,user,password,database是数据库的配置信息
 
@@ -109,7 +109,7 @@ public function execute()
 
 3、注意，配置信息的添加不是覆盖，而是追加，当添加了错误的信息时，请先删除生成的**typecho.conf **，否则错误的信息会一直在**typecho.conf **中。
 
-4、使用不同的typecho模板会设定不同的自定义字段（我说的不是你自己添加的自定义字段，而是你使用的外观模板的作者设定的自定义字段），体现在你写博客的那个界面的文本框的下方。如果你实在不会下面的操作，或是没有这个需求，可以不管它的。
+4、使用不同的typecho模板会设定不同的自定义字段（我说的不是你自己添加的自定义字段，而是你使用的外观模板的作者设定的自定义字段），体现在你写博客的那个界面的文本框的下方。如果你实在不会下面的操作，或是没有这个需求，可以忽略这一步。
 
 自定义字段的相关信息在表typecho_fields中，查看前你要先在web端写一篇使用到所有的外观模板的作者设定的自定义字段的文章（“的”比较多，泥萌好好断句）。
 
@@ -124,9 +124,9 @@ select * from typecho_fields;
 #此时你可以看到相关的自定义字段了
 ```
 
-![1567582430893](C:\Users\kljxn\AppData\Roaming\Typora\typora-user-images\1567582430893.png)
+![1567582430893](https://github.com/iyzyi/typecho_desktop_cmd/pic/1567582430893.png)
 
-name填写图中例如thumbnail的字符串（我这里的thumbnail,previewContent等都是我使用的外观模板的作者设定的，你的可能会和我的不同。而且注意，必须你写过的文章中使用过这些自定义字段，数据库中才会显示）
+name填写图中类似thumbnail的字符串（我这里的thumbnail,previewContent等都是我使用的外观模板的作者设定的，你的可能会和我的不同。而且注意，必须你写过的文章中使用过这些自定义字段，数据库中才会显示）
 
 type就写对应的类型，str，int，float三种
 
@@ -140,9 +140,9 @@ detail就写 程序运行到需要你输入自定义字段的时候，你希望�
 
 部分运行截图
 
-![1567582946346](C:\Users\kljxn\AppData\Roaming\Typora\typora-user-images\1567582946346.png)
+![1567582946346](https://github.com/iyzyi/typecho_desktop_cmd/pic/1567582946346.png)
 
-![1567582999459](C:\Users\kljxn\AppData\Roaming\Typora\typora-user-images\1567582999459.png)
+![1567582999459](https://github.com/iyzyi/typecho_desktop_cmd/pic/1567582999459.png)
 
 比较丑啊，希望别见怪，毕竟我是直男本男。。
 
