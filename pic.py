@@ -105,8 +105,10 @@ def find_pics(text, base_url, localDir, opera_own_pic=False):
     ![](D:\图片\喜欢\超喜欢(54图)_@越半月圆收集_花瓣美女1281828885.jpg)
     正则拿到的路径是D:\图片\喜欢\超喜欢(54图
     先不管了，加上个图片上传失败则跳过此图片吧
+    
+    已解决19.09.07
     '''
-    pic_iter = re.finditer(r'\!\[(.*?)\]\((.*?)\)', text)
+    pic_iter = re.finditer(r'\!\[(.*?)\]\((.*?\.(jpg|png|gif|bmp|png))\)', text)
     for tag in pic_iter:
         pic_dict = {}
         pic_dict['tag'] = tag.group(2)
@@ -130,11 +132,13 @@ def find_pics(text, base_url, localDir, opera_own_pic=False):
     '''
     
     num_iter = re.finditer(r'\!\[.*?\]\[(\d+)\]', text)
-    tag_iter = re.finditer(r'\[(\d+)\]: (.+?)[\r\n]+', text)
-    
-    for num in num_iter:
+    num_list = list(num_iter)    #第一次知道迭代器只能迭代一次，需要转成list才能迭代多次
+    tag_iter = re.finditer(r'\[(\d+)\]: ?(.*?\.(jpg|png|gif|bmp|png))[\n\r]', text)
+    tag_list = list(tag_iter)
+    for num in num_list:
         pic_dict = {}
-        for tag in tag_iter:
+        for tag in tag_list:
+            #print(num.group(1),222222222,tag.group(1))
             if num and tag and num.group(1) == tag.group(1):
                 pic_dict['tag'] = tag.group(2)    #图片地址
                 #print(22222222222222,pic_dict['tag'])
@@ -148,10 +152,12 @@ def find_pics(text, base_url, localDir, opera_own_pic=False):
                 pic_list.append(pic_dict)
     
     num_iter = re.finditer(r'\!\[.*?\]\[(\d+)\]', text)
-    tag_iter = re.finditer(r'\[(\d+)\]: (.+?)[\n\r]*$', text)   #匹配文末的那张图片
-    for num in num_iter:
+    num_list = list(num_iter)
+    tag_iter = re.finditer(r'\[(\d+)\]: ?(.*?\.(jpg|png|gif|bmp|png))[\n\r]*$', text)   #匹配文末的那张图片
+    tag_list = list(tag_iter)
+    for num in num_list:
         pic_dict = {}
-        for tag in tag_iter:
+        for tag in tag_list:
             #print(num, tag, num.group(1), tag.group(1))
             if num and tag and num.group(1) == tag.group(1):
                 #print('hhhhhhhhhhhhha')
@@ -166,7 +172,7 @@ def find_pics(text, base_url, localDir, opera_own_pic=False):
         if pic_dict:
             if 'local_path' in pic_dict:
                 pic_list.append(pic_dict)
-    
+
     
     #print(pic_list)
     return pic_list
@@ -184,4 +190,8 @@ if __name__ == '__main__':
     #pic_dict = {'name': '1.png', 'local_path':r'D:\图片\喜欢\超喜欢(54图)_@越半月圆收集_花瓣美女1281828885.jpg'}
     #pic_list = [pic_dict]
     #upload_pics(pic_list, url, token1, ip, user, password, database)
-    
+    with open(r'D:\计算机\Project\typecho_desktop_cmd\md\ida远程调试linux程序——阿里云CentOS版.md','r',encoding='utf-8')as f:
+        text = f.read()
+    p = find_pics(text, 'http://iyzy.xyz', r'D:\计算机\Project\typecho_desktop_cmd', opera_own_pic=False)
+    for i in p:
+        print(i['tag'])

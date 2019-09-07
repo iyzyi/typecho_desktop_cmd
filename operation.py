@@ -103,7 +103,7 @@ class Typecho():
                 
                 if mid:
                     print('已选择刚创建的新目录')
-                    return mid
+                    return mid[0]
                 else:
                     print('创建目录失败')
             else:
@@ -211,7 +211,10 @@ class Typecho():
                 elif type_ == 'float':
                     self.db.insert('typecho_fields', cid=passage_cid, name=name, type=type_, float_value=type_value)
         
-    
+        elif insert_or_update == 'update':
+            for pic_dict in pic_list:    #修改图片的parent为passage_cid，原先为0
+                self.db.update('typecho_contents', 'parent', cid, cid=pic_dict['cid'])
+        
 
     def cmd(self):
         
@@ -248,9 +251,10 @@ class Typecho():
                 pic_list = pic.find_pics(text, self.url, self.localDir, True)
                 for pic_dict in pic_list:    #将网络图片地址改为本地图片地址
                     try:
-                        text = text.replace(pic_dict['tag'], pic_dict['local_path'])    #有个问题，如果正文中出现了pic_dict['tag']的值怎么办？TODO
+                        relative_path = r'.\pic\%s'%pic_dict['name']
+                        text = text.replace(pic_dict['tag'], relative_path)    #有个问题，如果正文中出现了pic_dict['tag']的值怎么办？TODO
                         if text.find(pic_dict['tag'])  == -1:
-                            print('####替换%s为%s####'%(pic_dict['tag'], pic_dict['local_path']))
+                            print('####替换%s为%s####'%(pic_dict['tag'], relative_path))
                     except Exception as e:
                         print('替换图片地址失败，错误%s'%e)
                 with open(file_path, 'w', encoding='utf-8') as f:
@@ -294,11 +298,12 @@ class Typecho():
             print('\n共以下%d个分类，输入0可创建新分类：' % len(categorys))
             self.get_category_tree(categorys)
             mid_str = input('请选择文章所属分类，同时属于多个分类时以英文逗号分割:')
-            if mid_str == '':
-                mid = '0'    #分类显示为无，但不是在默认分类
-            elif mid_str == '0':
+            if mid_str == '0':
                 mid = self.make_category()    #创建新分类并选择该新分类
-            mid = eval('(%s,)'%mid_str)    #元组
+            else:
+                if mid_str == '':
+                    mid = '0'    #分类显示为无，但不是在默认分类
+                mid = eval('(%s,)'%mid_str)    #元组
 
             with open('typecho.conf') as f:    #自定义字段
                 file = f.read()

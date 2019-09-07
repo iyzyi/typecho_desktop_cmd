@@ -175,8 +175,10 @@ class DB():
         sql = 'UPDATE {} SET {}={} where {};'.format(table, update_column, update_column_value, columns)
         if update_column == 'text':
             sql_str = 'UPDATE {} SET {}={} where {};'.format(table, update_column, '"####文本内容省略####"', columns)
-            if self.print_sql:
-                print(sql_str)
+        else:
+            sql_str = sql
+        if self.print_sql:
+            print(sql_str)
         self.cursor.execute(sql)
         self.db.commit()
         
