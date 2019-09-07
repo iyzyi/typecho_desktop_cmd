@@ -216,6 +216,23 @@ class Typecho():
                 self.db.update('typecho_contents', 'parent', cid, cid=pic_dict['cid'])
         
 
+    def down_passage_with_pics(self,cid):
+        text_tuple = self.get_passage(cid)
+        file_path = text_tuple[0]
+        text = text_tuple[1]
+        pic_list = pic.find_pics(text, self.url, self.localDir, True)
+        for pic_dict in pic_list:    #将网络图片地址改为本地图片地址
+            try:
+                relative_path = r'.\pic\%s'%pic_dict['name']
+                text = text.replace(pic_dict['tag'], relative_path)    #有个问题，如果正文中出现了pic_dict['tag']的值怎么办？TODO
+                if text.find(pic_dict['tag'])  == -1:
+                    print('####替换%s为%s####'%(pic_dict['tag'], relative_path))
+            except Exception as e:
+                print('替换图片地址失败，错误%s'%e)
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(text)
+
+
     def cmd(self):
         
         #选择操作
@@ -228,7 +245,7 @@ class Typecho():
                 '6': '删除文章',
                 '7': '移动文章（所属分类）',
                 '8': '创建分类',
-                '9': '删除目录',#TODO
+                '9': '下载全部文章（包括全部图片）'
                 }
         for num, action in actions.items():
             print(num, action)
@@ -245,20 +262,7 @@ class Typecho():
         elif num == 2:
             cid = self.find_cid_by_catalogue()
             if cid:
-                text_tuple = self.get_passage(cid)
-                file_path = text_tuple[0]
-                text = text_tuple[1]
-                pic_list = pic.find_pics(text, self.url, self.localDir, True)
-                for pic_dict in pic_list:    #将网络图片地址改为本地图片地址
-                    try:
-                        relative_path = r'.\pic\%s'%pic_dict['name']
-                        text = text.replace(pic_dict['tag'], relative_path)    #有个问题，如果正文中出现了pic_dict['tag']的值怎么办？TODO
-                        if text.find(pic_dict['tag'])  == -1:
-                            print('####替换%s为%s####'%(pic_dict['tag'], relative_path))
-                    except Exception as e:
-                        print('替换图片地址失败，错误%s'%e)
-                with open(file_path, 'w', encoding='utf-8') as f:
-                    f.write(text)
+                self.down_passage_with_pics(cid)
               
                 
         elif num == 3:
@@ -381,9 +385,20 @@ class Typecho():
             categorys_tuple = self.get_category()
             self.get_category_tree(categorys_tuple)
             self.make_category()
+            
+            
+        elif num == 9:
+            cids = self.db.select('typecho_contents', 'cid', type='"post"')
+            cids += self.db.select('typecho_contents', 'cid', type='"page"')
+            for cid in cids:
+                cid = cid[0]
+                print('\n当前操作的文章cid为%d'%cid)
+                self.down_passage_with_pics(cid)
+                
 
         else:
             print('没有这样的操作哦')
+
 
 
 if __name__ == '__main__':

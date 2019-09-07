@@ -61,8 +61,12 @@ def add_pic_to_dict(pic_dict, pic_path, base_url, localDir, opera_own_pic=False)
     if re.search(r'^file:///(.+?)', pic_path):    #如果路径以file:///开头，则删掉file:///。此情景针对于有道云笔记的部分
         pic_path = re.search(r'^file:///(.+)', pic_path).group(1)
     
-    if re.search(r'^[a-zA-Z]:(\\|/)', pic_path):   #本地图片
+    if re.search(r'^[a-zA-Z]:(\\|/)', pic_path):   #本地图片绝对路径
         pic_dict['local_path'] = pic_path
+        
+    elif re.search(r'^\.\\pic', pic_path):    #本地图片相对路径
+        pic_dict['local_path'] = re.sub(r'^\.', localDir.replace('\\','\\\\'), pic_path)    #第二个参数：repl.如果repl是字符串的话，其中的任何反斜杠转义字符，都会被处理的。
+        #print(pic_dict['local_path'])
         
     elif re.search(r'^https?://', pic_path):    #网络图片
         url = pic_path
@@ -192,6 +196,6 @@ if __name__ == '__main__':
     #upload_pics(pic_list, url, token1, ip, user, password, database)
     with open(r'D:\计算机\Project\typecho_desktop_cmd\md\ida远程调试linux程序——阿里云CentOS版.md','r',encoding='utf-8')as f:
         text = f.read()
-    p = find_pics(text, 'http://iyzy.xyz', r'D:\计算机\Project\typecho_desktop_cmd', opera_own_pic=False)
+    p = find_pics(text, 'http://iyzy.xyz', r'D:\计算机\Project\typecho_desktop_cmd\md', opera_own_pic=False)
     for i in p:
         print(i['tag'])
