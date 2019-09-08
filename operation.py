@@ -168,7 +168,7 @@ class Typecho():
             text = text.replace(pic_dict['tag'], pic_dict['upload_path'])
             if text.find(pic_dict['tag'])  == -1:
                 print('####替换%s为%s####'%(pic_dict['tag'], pic_dict['upload_path']))
-        text = text.replace('"',r'\"')
+        text = text.replace('\\',r'\\').replace('"',r'\"')
 
         if insert_or_update == 'insert':
             ticks = int(time.time())
