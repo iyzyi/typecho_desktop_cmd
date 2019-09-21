@@ -72,7 +72,7 @@ class Typecho():
         name = res[0][0]
         text = res[0][1].replace(r'<!--markdown-->','')
         file_path = os.path.join(self.localDir, name+'.md')
-        with open(file_path, 'w', encoding='utf-8') as f:
+        with open(file_path, 'w', encoding='utf-8',errors='ignore') as f:
             f.write(text)
         return (file_path, text)
     
@@ -214,7 +214,7 @@ class Typecho():
         elif insert_or_update == 'update':
             for pic_dict in pic_list:    #修改图片的parent为passage_cid，原先为0
                 self.db.update('typecho_contents', 'parent', cid, cid=pic_dict['cid'])
-        
+
 
     def down_passage_with_pics(self,cid):
         text_tuple = self.get_passage(cid)
@@ -229,7 +229,7 @@ class Typecho():
                     print('####替换%s为%s####'%(pic_dict['tag'], relative_path))
             except Exception as e:
                 print('替换图片地址失败，错误%s'%e)
-        with open(file_path, 'w', encoding='utf-8') as f:
+        with open(file_path, 'w', encoding='utf-8',errors='ignore') as f:
             f.write(text)
 
 
@@ -291,7 +291,7 @@ class Typecho():
                 return None
 
             text = r'<!--markdown-->'
-            with open(file_path,'r',encoding='utf-8')as f:
+            with open(file_path,'r',encoding='utf-8',errors='ignore')as f:
                 text += str(f.read())
                 
             title = input('请输入文章标题（直接回车则以文件名作为标题）：')
@@ -344,7 +344,7 @@ class Typecho():
                     return None
             
                 text = r'<!--markdown-->'
-                with open(file_path,'r',encoding='utf-8')as f:
+                with open(file_path,'r',encoding='utf-8',errors='ignore')as f:
                     text += str(f.read())
                 self.upload_passage('update', text=text, cid=cid)
         
