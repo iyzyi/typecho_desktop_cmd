@@ -73,7 +73,7 @@ public function execute()
 }
 ```
 
-添加`echo "<script>alert('提示内容')</script>";`,如下：
+添加`echo "<script>alert('$this->_token')</script>";`,如下：
 
 ```php
 public function execute()
@@ -84,7 +84,7 @@ public function execute()
     $this->_token = $this->_options->secret;
     echo "<script>alert('$this->_token')</script>";
     if ($user->hasLogin()) {
-    $this->_token .= '&' . $user->authCode . '&' . $user->uid;
+    	$this->_token .= '&' . $user->authCode . '&' . $user->uid;
     }
 }
 ```
