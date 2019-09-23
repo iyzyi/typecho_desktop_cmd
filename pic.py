@@ -112,7 +112,7 @@ def find_pics(text, base_url, localDir, opera_own_pic=False):
     
     已解决19.09.07
     '''
-    pic_iter = re.finditer(r'\!\[(.*?)\]\((.*?\.(jpg|png|gif|bmp|png))\)', text)
+    pic_iter = re.finditer(r'\!\[(.*?)\]\((.*?\.(jpg|png|gif|bmp|jpeg))\)', text)
     for tag in pic_iter:
         pic_dict = {}
         pic_dict['tag'] = tag.group(2)

@@ -317,6 +317,8 @@ class Typecho():
             for field_dict in field_list:
                 print(field_dict['detail'])
                 value = input()
+                if field_dict['name'] == 'showTOC' and value == '':
+                    value = '1'
                 if value:
                     field_tuple = (field_dict['name'], field_dict['type'], value)
                     field_list_param.append(field_tuple)
