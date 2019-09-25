@@ -95,7 +95,7 @@ public function execute()
 
 ### 开启数据库远程连接
 
-[我整理的一篇相关的文章，仅供参考](http://iyzy.xyz/index.php/archives/449/)
+[我整理的一篇相关的文章，仅供参考](http://iyzyi.com/index.php/archives/223/)
 
 ### 程序配置
 
